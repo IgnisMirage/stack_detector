@@ -70,7 +70,7 @@ def generate_launch_description():
     # Stack Detector Node
     stack_detector_node = Node(
         package='stack_detector',
-        executable='stack_detector_node',
+        executable='stack_detector_exe',
         name='stack_detector_node',
         output='screen',
         parameters=[{
