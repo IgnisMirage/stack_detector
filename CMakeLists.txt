@@ -21,11 +21,11 @@ find_package(std_msgs REQUIRED)
 include_directories(include)
 
 # Stack detector node library (for component)
-add_library(stack_detector_node SHARED
+add_library(stack_detector_component SHARED
   src/stack_detector_node.cpp
 )
 
-ament_target_dependencies(stack_detector_node
+ament_target_dependencies(stack_detector_component
   rclcpp
   rclcpp_components
   geometry_msgs
@@ -33,18 +33,18 @@ ament_target_dependencies(stack_detector_node
 )
 
 # Register the component
-rclcpp_components_register_nodes(stack_detector_node "stack_detector::StackDetectorNode")
+rclcpp_components_register_nodes(stack_detector_component "stack_detector::StackDetectorNode")
 
 # Stack detector executable
-add_executable(stack_detector_exe
+add_executable(stack_detector_node
   src/stack_detector_main.cpp
 )
 
-target_link_libraries(stack_detector_exe
-  stack_detector_node
+target_link_libraries(stack_detector_node
+  stack_detector_component
 )
 
-ament_target_dependencies(stack_detector_exe
+ament_target_dependencies(stack_detector_node
   rclcpp
   geometry_msgs
   std_msgs
@@ -52,14 +52,14 @@ ament_target_dependencies(stack_detector_exe
 
 # Install targets
 install(TARGETS
-  stack_detector_node
+  stack_detector_component
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
 
 install(TARGETS
-  stack_detector_exe
+  stack_detector_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -68,10 +68,6 @@ install(DIRECTORY
   DESTINATION include
 )
 
-install(DIRECTORY
-  launch
-  DESTINATION share/${PROJECT_NAME}/
-)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -79,7 +75,7 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories(include)
-ament_export_libraries(stack_detector_node)
+ament_export_libraries(stack_detector_component)
 ament_export_dependencies(
   rclcpp
   rclcpp_components
